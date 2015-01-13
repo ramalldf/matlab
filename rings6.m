@@ -54,7 +54,7 @@ perimeter= perimeter0;
 counter0= 1;
 counter= counter0;
 %%==Make concentric edge masks and apply to lifetime image
-while perimeter >= 0.05*perimeter0 %Will isolate 30 rings from peripery
+while perimeter >= 0.1*perimeter0 %Will isolate 30 rings from peripery
     [erodMask,x,y]= concentric(ellipMask,counter);%Changed this to ellipmask
     edgeMask= edge(erodMask);
   
@@ -71,7 +71,7 @@ while perimeter >= 0.05*perimeter0 %Will isolate 30 rings from peripery
     perimsLife= [perimsLife,perimLife(:)];
     perimsInt= [perimsInt,perimInt(:)];
     
-    perimeter= regionprops(erodMask,'Perimeter')%This is a structure, need next line to get perimeter.
+    perimeter= regionprops(erodMask,'Perimeter');%This is a structure, need next line to get perimeter.
     perimeter= perimeter.Perimeter;
     counter= counter+1;
     
@@ -168,11 +168,11 @@ scriptUsed= importdata('rings6.m');%Saves content of script I used
 % ylim([100 400])
 
 %Uncomment if you want it to go faster
-% saveas(smoothPerim,['cell ' name ' plot smoothPerim.fig'])
-% saveas(plotRings,['cell ' name ' plot ringsPixels.fig'])
-% saveas(cdfRings,['cell ' name ' cdf rings.fig'])
-% saveas(mapRings,['cell ' name ' imagesc mapRingsLife.fig'])
-% saveas(mapRingsMid,['cell ' name ' imagesc rawMask.fig'])
+saveas(smoothPerim,['cell ' name ' plot smoothPerim.fig'])
+saveas(plotRings,['cell ' name ' plot ringsPixels.fig'])
+saveas(cdfRings,['cell ' name ' cdf rings.fig'])
+saveas(mapRings,['cell ' name ' imagesc mapRingsLife.fig'])
+saveas(mapRingsMid,['cell ' name ' imagesc mapRingsLifeMed.fig'])
 
 newfig
 midLifeLayers= [];
@@ -201,7 +201,7 @@ lifeIntPlot= plotyy(1:length(midLifeLayers),midLifeLayers,1:length(midIntLayers)
 %Comment out below if you want it to go faster
 title(['cell ' name ' Int vs Life'])
 
-%saveas(plotMidRings,['cell ' name ' plot midRings.fig'])
+saveas(plotMidRings,['cell ' name ' plot midRings.fig'])
 %saveas(lifeIntPlot,['cell ' name ' plot lifeIntRings.fig'])
 
 save(['cell' name ' ellipRings.mat'])

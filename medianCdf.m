@@ -19,7 +19,7 @@ intervals= [1./length(sortedList):1./length(sortedList):1];
 plot(sortedList, intervals,'color',varargin{2},'LineWidth',2)
 xlabel('Lifetime (ps)')
 ylabel('Probability')
-xlim([0 med+med*.5])
+xlim([0 3500])
 ylim([0 1])
     
 end
