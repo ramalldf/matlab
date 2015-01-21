@@ -105,23 +105,30 @@ finalEFF= uint16(thrLife2);
 imwrite(finalEFF, ['FinalThrLife' num2str(prefix) '.tif'], 'WriteMode', 'append')
 
 finalInt= uint16(alignInt);
-imwrite(finalInt, ['Int ' num2str(prefix) '.tif'])
 
-clearex('rawData','lifeScale','whiteCMap','thrLife2','alignInt','alignChi','prefix','green','bright','red')
 
-save(['' num2str(prefix) '.mat'])
-
-plot(alignInt(:),thrLife2(:), '.')
+newfig
+intLifePlot= plot(alignInt(:),thrLife2(:), '.');
 xlabel('Intensity (a.u.)')
 ylabel('Lifetime (ps)')
 ylim([0 3000])
-figure 
-imagesc(thrLife2, [1600 2300])
-figure 
-hist(thrLife2(:),3000)
+figure; 
+hist(thrLife2(:),3000);
+lifeHist= gcf;
+set(gcf,'Color',[1 1 1])%Set background to white, colormap to whiteCMap
 xlabel('Lifetime (ps)')
 ylabel('Density')
 xlim([0 3000])
+
+% clear all 
+saveas(intLifePlot,['' prefix ' plot int vs thrLife2.fig'])
+saveas(lifeHist,['' prefix ' hist thrLife2.fig'])
+
+imwrite(finalInt, ['Int ' num2str(prefix) '.tif'])
+
+clearvars -except rawData lifeScale whiteCMap thrLife2 alignInt alignChi prefix green bright red
+
+save(['' num2str(prefix) '.mat'])
 
 
 

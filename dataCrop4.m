@@ -14,9 +14,9 @@ bw2= single(bw);
 crop= bw2.*(lifeImage);
 crop2= bw2.*(intImage);
 %[crop,box]= imcrop(data);%Old code to crop image of roi in square
-[cdfCrop,cdfInt]= sortCdf(crop);%From cropped roi data, get cdf and cdf intervals
+[cdfCrop,cdfInt]= sortCdf2(crop,'green');%From cropped roi data, get cdf and cdf intervals
 
-midVal= 0.5;%For single gaussian mean will be at 0.5 so we'll be looking for lifetime value that's at interval position 0.5
+midVal= 0.5;%For single gaussian median will be at 0.5 so we'll be looking for lifetime value that's at interval position 0.5
 closer= abs(cdfInt-midVal);%Make new vector of abs of interval coordinates - desired coordinate, 0.5
 [closest,closestMidInt]= min(closer);%Finds [magnitude of smallest difference, coordinate in vector] of where 0.5 will be
 

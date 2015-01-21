@@ -11,17 +11,30 @@ intensityIndex = image(index);
 indexnotnan = find(~isnan(intensityIndex));
 intNonNan = intensityIndex(indexnotnan);
 distMapSortNonNan = distMapSort(indexnotnan);
-
+% 
 distMapSmooth = smooth(distMapSortNonNan,steps);
-intensityIndexSmooth = smooth(intensityIndex,steps);
+intensityIndexSmooth = smooth(intNonNan,steps);
+
+% disp('Here')
+% disp(length(distMapSortNonNan(:)))
+% disp('Here again')
+% disp(length(intensityIndex(:)))
+% distMapSmooth = smooth(distMapSortNonNan(1:40000),steps);
+% %intensityIndexSmooth = smooth(intensityIndex(1:40000),steps);
+% intensityIndexSmooth = smooth(intNonNan(1:40000),steps);
+
 % figure
-% plot(distMapSortNonNan,intNonNan,'.')
-% hold
+% plot(distMapSortNonNan,image(:),'.')
 % plot(distMapSmooth,intensityIndexSmooth,'.g')
 % smoothDistLife= gcf;
 % xlabel('Distance (pixels')
 % ylabel('Lifetime (ps)')
 
-% title(file)
-% xlim([0 200])
-% ylim([500 3000])
+
+figure
+plot(distMapSort,intensityIndex,'.')
+hold
+plot(distMapSmooth,intensityIndexSmooth,'.g')
+smoothDistLife= gcf;
+xlabel('Distance (pixels')
+% ylabel('Lifetime (ps)')
