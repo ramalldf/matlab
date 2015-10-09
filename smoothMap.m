@@ -1,13 +1,13 @@
 %Sorts and smooths distance map and plots sorted distance map and
 %corresponding intensity value
-%Requires pair of distance map and intensity map, step= size of moving avg.
+%Requires pair of distance map and intensity map, steps= size of moving avg.
 %filter
 
 function [intensityIndexSmooth,distMapSmooth,index]= smoothMap(distMap,image,steps);
 
 %==Sort distance map==
 
-[distMapSort, index] = sort(distMap(:));%Sorts distance map
+[distMapSort, index] = sort(distMap(:));%Sorts distance map and exports indices of sorted data
 intensityIndex = image(index);%New vector using indices of ordered elements
 
 indexnotnan = find(~isnan(intensityIndex));%Find indices of non-Nan elements
