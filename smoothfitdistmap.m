@@ -1,34 +1,39 @@
-%distMap smooth
-clear all
+% ============================
+% %=Centroid and smoothmap =
+% ============================
+%==Find centroid, make distance map==
+[mask,Centroid]= maskCentroid(bright);
+distMap= dist2Pt(Centroid,bright);%Uses actin image to make dist map
+%because it has more points to work with than m2b channel
+
+%=Test smoothmap for lifetime data=
 close all
+tic
 
-file= input('Name of file?: ');
-load(file)
+[intSmooth,distMapSmooth1,index1]= smoothMap(distMap,alignInt,20);%The distMapSmooth and index variables should be the same for both actin and m2b
+smIntFig= gcf;
+[thrLife2Smooth,distMapSmooth2,index2]= smoothMap(distMap,thrLife2,20);%
+toc
 
-distMap= dist2Pt(Centroid,thrLife2);
-[distmapsort, index] = sort(distMap(:));
-thrLife2sort = thrLife2(index);
+%=Linear fit=
+smFitExclusion = (distMapSmooth2 >= 96);%Exclude anything above threshold
 
-indexnotnan = find(~isnan(thrLife2sort));
-thrLife2notnansort = thrLife2sort(indexnotnan);
-distamp2notnansort = distmapsort(indexnotnan);
+ft_ = fittype('poly1');%Linear fit
+[smFit,gof] = fit(distMapSmooth2,thrLife2Smooth,ft_,'Exclude',smFitExclusion)
+plot(smFit)
+smLifeFig= gcf;
+smCoeffNames= coeffnames(smFit);%List coeff parameters, values, formula
+smCoeffVals= coeffvalues(smFit);
+smFormula= formula(smFit);
 
-distmapsmooth = smooth(distamp2notnansort,20);
-thrlifesmooth = smooth(thrLife2notnansort,20);
-newfig
-plot(distamp2notnansort,thrLife2notnansort,'.')
-hold
-plot(distmapsmooth,thrlifesmooth,'.g')
-smoothDistLife= gcf;
-xlabel('Distance (pixels')
-ylabel('Lifetime (ps)')
-title(file)
-xlim([0 100])
-ylim([500 3000])
+saveas(smIntFig,['' prefix 'dist vs intensity.fig'])
+saveas(smLifeFig,['' prefix 'dist vs lifetime.fig'])
 
-saveas(smoothDistLife,['cell' name ' plot smoothDistLife.fig'])
-save(['cell' file '_smoothdistmap.mat'])
+save(['' prefix '_Distmap fits.mat'])
 
-% coeffs= [];
-% fit2Gauss= fit(distmapsmooth',thrlifesmooth,'gauss2')
-% coeffs= coeffvalues(fit2Gauss);
+fileNames= [fileNames;prefix];
+totalCoeffNames= [totalCoeffNames;smCoeffNames'];
+totalCoeffs= [totalCoeffs;smCoeffVals];
+
+clearex('whiteCMap','lifescale','fileNames','totalCoeffNames','totalCoeffs')
+

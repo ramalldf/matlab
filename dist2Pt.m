@@ -1,6 +1,6 @@
 %Function dist2Pt creates a distance matrix for distances from given centroid
 
-%Input: Centroid coordinates and sample matrix (to get correct dimensions) and
+%Input: Centroid coordinates and SQUARE sample matrix
 %Output: matrix where each element corresponds to a distance from centroid
 %We'll use the Pythag. Theorem to find x and y distances from centroid for all elements in matrix 
 
@@ -8,10 +8,10 @@
 
 function [distanceMatrix]= dist2Pt(Centroid,matrix);
 
-x0= round(Centroid(1));%Rounds centroid coordinates for x and y
-y0= round(Centroid(2));
+x0= round(Centroid(2));%Rounds centroid coordinates for x and y
+y0= round(Centroid(1));
 
-[xSize,ySize]= size(matrix);%Get dimensions of matrix
+[ySize,xSize]= size(matrix);%Get dimensions of matrix
 
 xLength= 1:xSize;%Vectors for all x and y coordinates
 yLength= 1:ySize;
@@ -31,17 +31,20 @@ ySqr= yDiff.^2;
 xMat= [];
 yMat= [];
 
-%Insert the same vector, xSqr, into every column in xMat 
+%Insert the same vector, xSqr, into every row in xMat
+%Reason is that x distance for all rows will be the same at a given column (x) 
 for counter= 1:xSize
 xMat= [xMat;xSqr];
 end
 
-%Insert the same vector, ySqr',(transpose of ySqr), into every row in yMat 
+%Now do the same for ySqr',(transpose of ySqr), into every column in yMat
+%y distance from centroid will be the same for a
  
 for counter= 1:ySize
 yMat= [yMat,ySqr'];
 end
 
+%Now add matrices and take square root to get distance at each element
 sumXMatYMat= xMat+yMat;
 distanceMatrix= sqrt(sumXMatYMat);
 
